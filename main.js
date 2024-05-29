@@ -5,6 +5,7 @@ console.log('Hola mundo con Node JS')
 
 // forma actual con ECMAScript 6 de llamar librerias
 import express from 'express'
+import client from './db.js'
 
 
 const app = express()
@@ -20,7 +21,17 @@ const port = 3000
 // - el callback recibe 2 parametros:
 // - req: request o la peticion
 // - res: response o la respuesta
-app.get('/api/v1/usuarios', (req, res) => {
+app.get('/api/v1/usuarios', async (req, res) => {
+   
+    await client.connect()
+
+    const db = client.db("sample_mflix")
+    const users = db.collection("users")
+
+    const listaDeUsuarios = await users.find({}).toArray()
+    console.log(listaDeUsuarios)
+
+
     // const respuesta = {
     //     mensaje: "hola"
     // }
